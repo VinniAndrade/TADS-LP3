@@ -1,13 +1,25 @@
 package br.edu.ifsp.orderflow.service;
 
 import br.edu.ifsp.orderflow.domain.Pedido;
+import br.edu.ifsp.orderflow.domain.ResultadoPagamento;
 
 public class PedidoService {
 
-    private iEstoqueService estoqueService;
+    private final iEstoqueService estoqueService;
+    private final iPedidoRepository pedidoRepository;
+    private final iPagamentoGateway pagamentoGateway;
+    private final iNotificacaoService notificacaoService;
 
-    public PedidoService(iEstoqueService estoqueService) {
+    public PedidoService(
+            iEstoqueService estoqueService,
+            iPedidoRepository pedidoRepository,
+            iPagamentoGateway pagamentoGateway,
+            iNotificacaoService notificacaoService
+    ) {
         this.estoqueService = estoqueService;
+        this.pedidoRepository = pedidoRepository;
+        this.pagamentoGateway = pagamentoGateway;
+        this.notificacaoService = notificacaoService;
     }
 
     public Pedido processar(Pedido pedido) {
@@ -16,17 +28,28 @@ public class PedidoService {
 
         if(!foiReservado){
             pedido.cancelar();
-            //Salvar o pedido
+            this.pedidoRepository.save(pedido);
             return pedido;
         }
 
-        //Processar o pagamento
+        ResultadoPagamento resultado = this.pagamentoGateway.pagar(pedido);
+        boolean naoAprovado = !resultado.isAprovado();
 
-        //Salvar se o pagamento ocorreu com sucesso
+        if (naoAprovado) {
+            this.estoqueService.liberar(pedido);
+            pedido.cancelar();
+            this.pedidoRepository.save(pedido);
+            return pedido;
+        }
 
-        //Notificar o cliente
+        pedido.marcarComoPago();
+        this.pedidoRepository.save(pedido);
 
-        //Retorna o pedido
+        this.notificacaoService.notificar(
+                pedido.getCliente(),
+                "Pagamento aprovado! Pedido" + pedido.getIdCurto() + " confirmado"
+        );
+
         return pedido;
     }
 }

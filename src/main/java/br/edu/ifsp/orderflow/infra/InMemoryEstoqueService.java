@@ -24,6 +24,14 @@ public class InMemoryEstoqueService implements iEstoqueService {
         return this.estoque.getOrDefault(produto.getId(), 0);
     }
 
+    private void sleep(long millis) {
+        try {
+            Thread.sleep(millis);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+    }
+
     @Override
     public boolean reservar(Pedido pedido) {
 
