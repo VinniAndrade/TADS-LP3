@@ -3,7 +3,7 @@ package br.edu.ifsp.orderflow.service;
 import br.edu.ifsp.orderflow.domain.Produto;
 import br.edu.ifsp.orderflow.domain.Pedido;
 
-public interface iEstoqueService {
+public interface IEstoqueService {
 
     /**
      * Repõe unidades de um produto no estoque

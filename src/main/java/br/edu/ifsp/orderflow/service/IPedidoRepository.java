@@ -5,7 +5,7 @@ import br.edu.ifsp.orderflow.domain.Pedido;
 import java.util.List;
 import java.util.Optional;
 
-public interface iPedidoRepository {
+public interface IPedidoRepository {
 
     void save(Pedido pedido);
 

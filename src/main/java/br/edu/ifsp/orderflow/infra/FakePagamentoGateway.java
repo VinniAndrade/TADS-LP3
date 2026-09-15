@@ -2,13 +2,12 @@ package br.edu.ifsp.orderflow.infra;
 
 import br.edu.ifsp.orderflow.domain.Pedido;
 import br.edu.ifsp.orderflow.domain.ResultadoPagamento;
-import br.edu.ifsp.orderflow.service.iPagamentoGateway;
+import br.edu.ifsp.orderflow.service.IPagamentoGateway;
 
-import javax.xml.transform.Result;
 import java.math.BigDecimal;
 import java.util.UUID;
 
-public class FakePagamentoGateway implements iPagamentoGateway {
+public class FakePagamentoGateway implements IPagamentoGateway {
 
     private static final BigDecimal CARD_LIMIT = new BigDecimal("5000.00");
 

@@ -19,10 +19,10 @@ public class Main {
 
     public static void main(String[] args) {
 
-        iEstoqueService estoqueService = new InMemoryEstoqueService();
-        iPedidoRepository pedidoRepository = new InMemoryPedidoRepository();
-        iNotificacaoService notificacaoService = new ConsoleNotificacaoService();
-        iPagamentoGateway pagamentoGateway = new FakePagamentoGateway();
+        IEstoqueService estoqueService = new InMemoryEstoqueService();
+        IPedidoRepository pedidoRepository = new InMemoryPedidoRepository();
+        INotificacaoService notificacaoService = new ConsoleNotificacaoService();
+        IPagamentoGateway pagamentoGateway = new FakePagamentoGateway();
 
         PedidoService pedidoService = new PedidoService(
                 estoqueService,

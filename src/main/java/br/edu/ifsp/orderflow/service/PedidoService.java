@@ -5,16 +5,16 @@ import br.edu.ifsp.orderflow.domain.ResultadoPagamento;
 
 public class PedidoService {
 
-    private final iEstoqueService estoqueService;
-    private final iPedidoRepository pedidoRepository;
-    private final iPagamentoGateway pagamentoGateway;
-    private final iNotificacaoService notificacaoService;
+    private final IEstoqueService estoqueService;
+    private final IPedidoRepository pedidoRepository;
+    private final IPagamentoGateway pagamentoGateway;
+    private final INotificacaoService notificacaoService;
 
     public PedidoService(
-            iEstoqueService estoqueService,
-            iPedidoRepository pedidoRepository,
-            iPagamentoGateway pagamentoGateway,
-            iNotificacaoService notificacaoService
+            IEstoqueService estoqueService,
+            IPedidoRepository pedidoRepository,
+            IPagamentoGateway pagamentoGateway,
+            INotificacaoService notificacaoService
     ) {
         this.estoqueService = estoqueService;
         this.pedidoRepository = pedidoRepository;
