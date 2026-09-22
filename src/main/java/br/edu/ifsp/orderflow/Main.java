@@ -6,6 +6,11 @@ import br.edu.ifsp.orderflow.domain.Cliente;
 import br.edu.ifsp.orderflow.domain.ItemPedido;
 import br.edu.ifsp.orderflow.domain.Pedido;
 import br.edu.ifsp.orderflow.domain.Produto;
+import br.edu.ifsp.orderflow.events.IEventHandler;
+import br.edu.ifsp.orderflow.events.IEventBus;
+import br.edu.ifsp.orderflow.events.PagamentoAprovado;
+import br.edu.ifsp.orderflow.events.SimpleEventBus;
+import br.edu.ifsp.orderflow.events.handlers.PagamentoAprovadoNotificacaoHandler;
 import br.edu.ifsp.orderflow.infra.ConsoleNotificacaoService;
 import br.edu.ifsp.orderflow.infra.FakePagamentoGateway;
 import br.edu.ifsp.orderflow.infra.InMemoryEstoqueService;
@@ -14,6 +19,7 @@ import br.edu.ifsp.orderflow.service.*;
 
 
 import java.math.BigDecimal;
+import java.time.Instant;
 
 public class Main {
 
@@ -23,6 +29,22 @@ public class Main {
         IPedidoRepository pedidoRepository = new InMemoryPedidoRepository();
         INotificacaoService notificacaoService = new ConsoleNotificacaoService();
         IPagamentoGateway pagamentoGateway = new FakePagamentoGateway();
+        IEventBus eventBus = new SimpleEventBus();
+
+        PagamentoAprovadoNotificacaoHandler eventoHandler = new PagamentoAprovadoNotificacaoHandler(
+                pedidoRepository,
+                notificacaoService
+        );
+
+        eventBus.register(eventoHandler);
+
+        PagamentoAprovado evento1 = new PagamentoAprovado(
+                "pedido-1",
+                "transacao-1",
+                Instant.now()
+        );
+
+        eventBus.publish(evento1);
 
         PedidoService pedidoService = new PedidoService(
                 estoqueService,

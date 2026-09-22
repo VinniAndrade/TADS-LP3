@@ -8,12 +8,12 @@ import br.edu.ifsp.orderflow.service.IPedidoRepository;
 
 import java.util.Optional;
 
-public class PagamentoAprovadoNotificacaoHandler implements IEventHandler<PagamentoAprovado> {
+public class PedidoCanceladoNotificacaoHandler implements IEventHandler<br.edu.ifsp.orderflow.events.handlers.PedidoCancelado> {
 
     private final IPedidoRepository pedidoRepository;
     private final INotificacaoService notificacaoService;
 
-    public PagamentoAprovadoNotificacaoHandler(
+    public PedidoCanceladoNotificacaoHandler(
             IPedidoRepository pedidoRepository,
             INotificacaoService notificacaoService
     ){
@@ -22,7 +22,7 @@ public class PagamentoAprovadoNotificacaoHandler implements IEventHandler<Pagame
     }
 
     @Override
-    public void handle(PagamentoAprovado event) {
+    public void handle(br.edu.ifsp.orderflow.events.handlers.PedidoCancelado event) {
 
         Optional<Pedido> pedidoEncontrado = this.pedidoRepository.findById(event.pedidoId());
 
@@ -33,14 +33,14 @@ public class PagamentoAprovadoNotificacaoHandler implements IEventHandler<Pagame
             this.notificacaoService.notificar(
                     pedido.getCliente(),
                     "Pagamento aprovado! Pedido" + pedido.getIdCurto()
-                    + "confirmado (transação" + event.transacaoId() + ")"
+                            + "confirmado (transação" + event.motivo() + ")"
             );
         }
 
     }
 
     @Override
-    public Class<PagamentoAprovado> eventType() {
-        return PagamentoAprovado.class;
+    public Class<br.edu.ifsp.orderflow.events.handlers.PedidoCancelado> eventType() {
+        return null;
     }
 }
